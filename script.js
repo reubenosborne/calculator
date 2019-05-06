@@ -56,27 +56,28 @@ const calculator = {
     },
 
     addition(num1, num2) {
-        return parseInt(num1) + parseInt(num2);
+        return parseFloat(num1) + parseFloat(num2);
     },
 
     subtraction(num1, num2) {
-        return parseInt(num1) - parseInt(num2);
+        return parseFloat(num1) - parseFloat(num2);
     },
 
     multiplication(num1, num2) {
-        return parseInt(num1) * parseInt(num2);
+        return parseFloat(num1) * parseFloat(num2);
     },
 
     division(num1, num2) {
-        return parseInt(num1) / parseInt(num2);
+        return parseFloat(num1) / parseFloat(num2);
     }
 
 }
 
+const calc = document.getElementById('calculator');
 const screen = document.getElementById('screen');
 
 const eventListeners = () => {
-    document.getElementById('calculator').addEventListener('click', function (event) {
+    calc.addEventListener('click', function (event) {
         if (event.target.dataset.number) {
             calculator.currentValue = event.target.textContent;
             screen.textContent = calculator.currentValue;
@@ -104,6 +105,10 @@ const eventListeners = () => {
             calculator._currentValue = '';
             calculator._storedValue = '';
             screen.textContent = '0';
+        } else if (event.target.dataset.decimal) {
+            if (calculator.currentValue.includes('.')) {return}
+            calculator.currentValue = event.target.textContent;
+            screen.textContent = calculator.currentValue;
         }
     })
 };
