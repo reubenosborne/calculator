@@ -73,32 +73,37 @@ const calculator = {
 
 }
 
+const screen = document.getElementById('screen');
+
 const eventListeners = () => {
     document.getElementById('calculator').addEventListener('click', function (event) {
         if (event.target.dataset.number) {
             calculator.currentValue = event.target.textContent;
-            document.getElementById('screen').textContent = calculator.currentValue;
-        } else if (event.target.dataset.action) {
-            calculator.currentOperation = event.target.dataset.action;
-            document.getElementById('screen').textContent = event.target.textContent;
+            screen.textContent = calculator.currentValue;
+        } else if (event.target.dataset.operator) {
+            calculator.currentOperation = event.target.dataset.operator;
+            screen.textContent = event.target.textContent;
             calculator.storedValue = calculator.currentValue;
             calculator._currentValue = '';
         } else if (event.target.dataset.equals) {
             switch (calculator.currentOperation) {
                 case 'multiply':
-                    document.getElementById('screen').textContent = calculator.multiplication(calculator.storedValue, calculator.currentValue);
+                    screen.textContent = calculator.multiplication(calculator.storedValue, calculator.currentValue);
                     break;
                 case 'divide':
-                    document.getElementById('screen').textContent = calculator.division(calculator.storedValue, calculator.currentValue);
+                    screen.textContent = calculator.division(calculator.storedValue, calculator.currentValue);
                     break;
                 case 'add':
-                    document.getElementById('screen').textContent = calculator.addition(calculator.storedValue, calculator.currentValue);
+                    screen.textContent = calculator.addition(calculator.storedValue, calculator.currentValue);
                     break;
                 case 'subtract':
-                    document.getElementById('screen').textContent = calculator.subtraction(calculator.storedValue, calculator.currentValue);
+                    screen.textContent = calculator.subtraction(calculator.storedValue, calculator.currentValue);
                     break;
-
             }
+        } else if (event.target.dataset.clear) {
+            calculator._currentValue = '';
+            calculator._storedValue = '';
+            screen.textContent = '0';
         }
     })
 };
