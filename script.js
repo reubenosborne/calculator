@@ -87,6 +87,7 @@ const eventListeners = () => {
             calculator._currentValue = '';
 
         } else if (event.target.dataset.equals) {
+            if (!calculator._storedValue) {return}
             switch (calculator.currentOperation) {
                 case 'multiply':
                     screen.textContent = calculator.multiplication(calculator.storedValue, calculator.currentValue);
@@ -101,12 +102,11 @@ const eventListeners = () => {
                     screen.textContent = calculator.subtraction(calculator.storedValue, calculator.currentValue);
                     break;
             }
-
         } else if (event.target.dataset.clear) {
             calculator._currentValue = '';
             calculator._storedValue = '';
             screen.textContent = '0';
-            
+
         } else if (event.target.dataset.decimal) {
             if (calculator.currentValue.includes('.')) {return}
             calculator.currentValue = event.target.textContent;
