@@ -74,16 +74,16 @@ const calculator = {
 }
 
 const eventListeners = () => {
-    document.getElementById('calculator').addEventListener('click', function (evt) {
-        if (evt.target.dataset.number) {
-            calculator.currentValue = evt.target.textContent;
+    document.getElementById('calculator').addEventListener('click', function (event) {
+        if (event.target.dataset.number) {
+            calculator.currentValue = event.target.textContent;
             document.getElementById('screen').textContent = calculator.currentValue;
-        } else if (evt.target.dataset.action) {
-            calculator.currentOperation = evt.target.dataset.action;
-            document.getElementById('screen').textContent = evt.target.textContent;
+        } else if (event.target.dataset.action) {
+            calculator.currentOperation = event.target.dataset.action;
+            document.getElementById('screen').textContent = event.target.textContent;
             calculator.storedValue = calculator.currentValue;
             calculator._currentValue = '';
-        } else if (evt.target.dataset.equals) {
+        } else if (event.target.dataset.equals) {
             switch (calculator.currentOperation) {
                 case 'multiply':
                     document.getElementById('screen').textContent = calculator.multiplication(calculator.storedValue, calculator.currentValue);
