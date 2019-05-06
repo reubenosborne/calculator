@@ -51,10 +51,6 @@ const calculator = {
         return this._currentOperation;
     },
 
-    currentToStored() {
-        this.storedValue = this.currentValue;
-    },
-
     addition(num1, num2) {
         return parseFloat(num1) + parseFloat(num2);
     },
@@ -78,14 +74,18 @@ const screen = document.getElementById('screen');
 
 const eventListeners = () => {
     calc.addEventListener('click', function (event) {
+
         if (event.target.dataset.number) {
+            if (event.target.dataset.number === '0' && screen.textContent === '0') {return}
             calculator.currentValue = event.target.textContent;
             screen.textContent = calculator.currentValue;
+
         } else if (event.target.dataset.operator) {
             calculator.currentOperation = event.target.dataset.operator;
             screen.textContent = event.target.textContent;
             calculator.storedValue = calculator.currentValue;
             calculator._currentValue = '';
+
         } else if (event.target.dataset.equals) {
             switch (calculator.currentOperation) {
                 case 'multiply':
@@ -101,10 +101,12 @@ const eventListeners = () => {
                     screen.textContent = calculator.subtraction(calculator.storedValue, calculator.currentValue);
                     break;
             }
+
         } else if (event.target.dataset.clear) {
             calculator._currentValue = '';
             calculator._storedValue = '';
             screen.textContent = '0';
+            
         } else if (event.target.dataset.decimal) {
             if (calculator.currentValue.includes('.')) {return}
             calculator.currentValue = event.target.textContent;
