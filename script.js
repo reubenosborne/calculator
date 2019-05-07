@@ -1,31 +1,11 @@
-// Enter a number
-// display number on screen
-
-// Enter an operator
-// if multiple operators are chosen -> choose newest
-// store number previously shown on screen
-
-// Enter a number
-// display number on screen
-
-// Equals
-
-
-
-
-// On each click add the number to the value
-
-// If the click is = 0 and the existing number is = 0 ignore it
-
-// Storage
-
-// 
-
+// Initial draft - the happy path - was peer coded with David Brown
+// All other functionality and styling was individual
 
 const calculator = {
     _currentValue: '',
     _storedValue: '',
     _currentOperation: '',
+    result: '',
 
     set currentValue(newValue) {
         this._currentValue += newValue;
@@ -51,22 +31,62 @@ const calculator = {
         return this._currentOperation;
     },
 
-    addition(num1, num2) {
-        return parseFloat(num1) + parseFloat(num2);
+    math: {
+
+        addition(num1, num2) {
+            return parseFloat(num1) + parseFloat(num2);
+        },
+
+        subtraction(num1, num2) {
+            return parseFloat(num1) - parseFloat(num2);
+        },
+
+        multiplication(num1, num2) {
+            return parseFloat(num1) * parseFloat(num2);
+        },
+
+        division(num1, num2) {
+            return parseFloat(num1) / parseFloat(num2);
+        },
     },
 
-    subtraction(num1, num2) {
-        return parseFloat(num1) - parseFloat(num2);
+    clear: {
+
+        currentValue() {
+            calculator._currentValue = '';
+        },
+
+        storedValue() {
+            calculator._storedValue = '';
+        },
+
+        storedResult(){
+            if (calculator.result) {delete calculator.result}
+        }
     },
 
-    multiplication(num1, num2) {
-        return parseFloat(num1) * parseFloat(num2);
+    store: {
+
+        currentValue() {
+            calculator.storedValue = calculator.currentValue;
+        },
+
+        currentOperator() {
+            calculator.currentOperation = event.target.dataset.operator;
+        }
+
     },
 
-    division(num1, num2) {
-        return parseFloat(num1) / parseFloat(num2);
+    screen: {
+
+        display(value) {
+            screen.textContent = value;
+        },
+
+        clear() {
+            screen.textContent = '0';
+        }
     }
-
 }
 
 const calc = document.getElementById('calculator');
@@ -76,44 +96,71 @@ const eventListeners = () => {
     calc.addEventListener('click', function (event) {
 
         var type = event.target.dataset.type;
-        var operator = event.target.dataset.operator;
 
-        if (type === 'number') {
-            if (type.number === '0' && screen.textContent === '0') {return}
-            calculator.currentValue = event.target.textContent;
-            screen.textContent = calculator.currentValue;
+        switch (type) {
 
-        } else if (type === 'operator') {
-            calculator.currentOperation = operator;
-            screen.textContent = event.target.textContent;
-            calculator.storedValue = calculator.currentValue;
-            calculator._currentValue = '';
+            case 'number':
+                // Prevent leading zeros
+                if (type.number === '0' && screen.textContent === '0') { return }
+                // Set current value
+                calculator.currentValue = event.target.textContent;
+                calculator.screen.display(calculator.currentValue);
+                break;
 
-        } else if (type === 'equals') {
-            if (!calculator._storedValue) {return}
-            switch (calculator.currentOperation) {
-                case 'multiply':
-                    screen.textContent = calculator.multiplication(calculator.storedValue, calculator.currentValue);
-                    break;
-                case 'divide':
-                    screen.textContent = calculator.division(calculator.storedValue, calculator.currentValue);
-                    break;
-                case 'add':
-                    screen.textContent = calculator.addition(calculator.storedValue, calculator.currentValue);
-                    break;
-                case 'subtract':
-                    screen.textContent = calculator.subtraction(calculator.storedValue, calculator.currentValue);
-                    break;
-            }
-        } else if (type === 'clear') {
-            calculator._currentValue = '';
-            calculator._storedValue = '';
-            screen.textContent = '0';
+            case 'operator':
+                calculator.store.currentOperator();
+                calculator.screen.display(event.target.textContent);
+                calculator.store.currentValue();
+                calculator.clear.currentValue();
+                break;
 
-        } else if (type === 'decimal') {
-            if (calculator.currentValue.includes('.')) {return}
-            calculator.currentValue = event.target.textContent;
-            screen.textContent = calculator.currentValue;
+            case 'equals':
+                // Escape if there's not enough integers to perform function
+                if (!calculator._storedValue) { return }
+
+                // Store the previous result to perform calculations on if there are more operations
+                if (calculator.result) { calculator.storedValue = calculator.result }
+
+                // Choose operator and apply math
+                switch (calculator.currentOperation) {
+
+                    case 'multiply':
+                        calculator.result = calculator.math.multiplication(calculator.storedValue, calculator.currentValue);
+                        calculator.screen.display(calculator.result);
+                        break;
+
+                    case 'divide':
+                        calculator.result = calculator.math.division(calculator.storedValue, calculator.currentValue);
+                        calculator.screen.display(calculator.result);
+                        break;
+
+                    case 'add':
+                        calculator.result = calculator.math.addition(calculator.storedValue, calculator.currentValue);
+                        calculator.screen.display(calculator.result);
+                        break;
+
+                    case 'subtract':
+                        calculator.result = calculator.math.subtraction(calculator.storedValue, calculator.currentValue);
+                        calculator.screen.display(calculator.result);
+                        break;
+                }
+                break;
+
+            case 'clear':
+                // Clear current value, stored value, stored result and clear screen
+                calculator.clear.currentValue();
+                calculator.clear.storedValue();
+                calculator.screen.clear();
+                calculator.clear.storedResult();
+                break;
+
+            case 'decimal':
+                // Prevent multiple decimals
+                if (calculator.currentValue.includes('.')) { return }
+                // Add decimal point
+                calculator.currentValue = '.';
+                calculator.screen.display(calculator.currentValue);
+                break;
         }
     })
 };
@@ -121,6 +168,3 @@ const eventListeners = () => {
 
 
 eventListeners()
-
-
-// If there is a 'result' then 
