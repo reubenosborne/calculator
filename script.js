@@ -74,21 +74,22 @@ const screen = document.getElementById('screen');
 
 const eventListeners = () => {
     calc.addEventListener('click', function (event) {
-        var etd = event.target.dataset;
-        // switch(etd)
 
-        if (etd.number) {
-            if (etd.number === '0' && screen.textContent === '0') {return}
+        var type = event.target.dataset.type;
+        var operator = event.target.dataset.operator;
+
+        if (type === 'number') {
+            if (type.number === '0' && screen.textContent === '0') {return}
             calculator.currentValue = event.target.textContent;
             screen.textContent = calculator.currentValue;
 
-        } else if (etd.operator) {
-            calculator.currentOperation = etd.operator;
+        } else if (type === 'operator') {
+            calculator.currentOperation = operator;
             screen.textContent = event.target.textContent;
             calculator.storedValue = calculator.currentValue;
             calculator._currentValue = '';
 
-        } else if (etd.equals) {
+        } else if (type === 'equals') {
             if (!calculator._storedValue) {return}
             switch (calculator.currentOperation) {
                 case 'multiply':
@@ -104,12 +105,12 @@ const eventListeners = () => {
                     screen.textContent = calculator.subtraction(calculator.storedValue, calculator.currentValue);
                     break;
             }
-        } else if (etd.clear) {
+        } else if (type === 'clear') {
             calculator._currentValue = '';
             calculator._storedValue = '';
             screen.textContent = '0';
 
-        } else if (etd.decimal) {
+        } else if (type === 'decimal') {
             if (calculator.currentValue.includes('.')) {return}
             calculator.currentValue = event.target.textContent;
             screen.textContent = calculator.currentValue;
@@ -122,4 +123,4 @@ const eventListeners = () => {
 eventListeners()
 
 
-// If there is
+// If there is a 'result' then 
