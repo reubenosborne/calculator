@@ -33,6 +33,7 @@ div:hover {
 }
 
 #calculator {
+    z-index: 1;
     width: 500px;
     height: 600px;
     display: grid;
@@ -59,6 +60,7 @@ div:hover {
 }
 
 #screen {
+    z-index: 0;
     grid-area: 1 / 1 / 2 / 5;
     height: 100px;
     font-size: 80px;
@@ -81,4 +83,5 @@ div:hover {
 .outer {
     background: #444;
     height: 100%;
+    z-index: 2;
 }
