@@ -60,8 +60,8 @@ const calculator = {
             calculator._storedValue = '';
         },
 
-        storedResult(){
-            if (calculator.result) {delete calculator.result}
+        storedResult() {
+            if (calculator.result) { delete calculator.result }
         }
     },
 
@@ -95,22 +95,22 @@ const screen = document.getElementById('screen');
 const eventListeners = () => {
     calc.addEventListener('click', function (event) {
 
-        var type = event.target.dataset.type;
+        let type = event.target.dataset.type;
+        let target = event.target.textContent;
 
         switch (type) {
 
             case 'number':
                 // Prevent leading zeros
-                console.log(event.target.textContent)
-                if (event.target.textContent === '0' && screen.textContent === '0') { return; }
+                if (target === '0' && screen.textContent === '0') { return; }
                 // Set current value
-                calculator.currentValue = event.target.textContent;
+                calculator.currentValue = target;
                 calculator.screen.display(calculator.currentValue);
                 break;
 
             case 'operator':
                 calculator.store.currentOperator();
-                calculator.screen.display(event.target.textContent);
+                calculator.screen.display(target);
                 calculator.store.currentValue();
                 calculator.clear.currentValue();
                 break;
