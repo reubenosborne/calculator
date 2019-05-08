@@ -101,7 +101,8 @@ const eventListeners = () => {
 
             case 'number':
                 // Prevent leading zeros
-                if (type.number === '0' && screen.textContent === '0') { return }
+                console.log(event.target.textContent)
+                if (event.target.textContent === '0' && screen.textContent === '0') { return; }
                 // Set current value
                 calculator.currentValue = event.target.textContent;
                 calculator.screen.display(calculator.currentValue);
